@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  grafana: 
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - tunnel-network
+
+volumes:
+  grafana-data:
+    driver: local
+
+networks:
+  tunnel-network:
+    name: tunnel-network

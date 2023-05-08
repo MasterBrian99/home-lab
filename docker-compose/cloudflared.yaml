@@ -1,0 +1,14 @@
+ version: "3.7"
+
+ services:
+   cloudflared:
+       image: cloudflare/cloudflared:latest
+       container_name: cloudflared-tunnel
+       restart: unless-stopped
+       command: tunnel --no-autoupdate run --token sdfsdf
+       networks:
+         - tunnel-network
+
+ networks:
+   tunnel-network:
+     name: tunnel-network

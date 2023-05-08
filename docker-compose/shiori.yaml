@@ -1,0 +1,20 @@
+version: "3"
+services:
+  shiori:
+    image: ghcr.io/go-shiori/shiori
+    container_name: shiori
+    environment:
+      - PUID=1000
+      - PGID=1000
+
+
+    networks:
+      - tunnel-network
+    restart: unless-stopped
+    volumes:
+      - /home/brian/server-files/storage/shiori:/shiori 
+
+
+networks:
+  tunnel-network:
+    name: tunnel-network

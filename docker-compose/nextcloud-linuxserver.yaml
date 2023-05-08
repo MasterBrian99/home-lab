@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC/GMT
+    volumes:
+      - /home/brian/server-files/storage/nextcloud/appdata:/config
+      - /home/brian/server-files/storage/nextcloud/data:/data
+
+    restart: unless-stopped
+    networks:
+      - tunnel-network
+
+networks:
+  tunnel-network:
+    name: tunnel-network
