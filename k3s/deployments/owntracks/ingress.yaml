@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: owntracks-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+    # traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: owntracks-basic-auth@kubernetescrd
+
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - owntracks.example.com
+      secretName: owntracks-tls   
+  rules:
+    - host: owntracks.example.com  
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: owntracks-recorder    
+                port:
+                  number: 80     

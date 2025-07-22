@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: authelia-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entryPoints: 'websecure' # Ensure it listens on HTTPS
+    traefik.ingress.kubernetes.io/router.tls: 'true'               # Ensure TLS is enabled
+    # >>> ADD THIS ANNOTATION <<<
+    traefik.ingress.kubernetes.io/router.middlewares: 'default-authelia-public-headers@kubernetescrd' # Point to your new middleware
+
+
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - auth.example.com
+      secretName: authelia-tls   
+  rules:
+    - host: auth.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: authelia
+                port:
+                  number: 80     

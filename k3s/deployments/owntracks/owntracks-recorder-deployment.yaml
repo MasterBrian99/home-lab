@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: owntracks-recorder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: owntracks-recorder
+  template:
+    metadata:
+      labels:
+        app: owntracks-recorder
+    spec:
+      containers:
+        - name: owntracks-recorder
+          image: owntracks/recorder
+          env:
+            - name: OTR_PORT
+              value: "0"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: config
+              mountPath: /config
+            - name: store
+              mountPath: /store
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: config
+          persistentVolumeClaim:
+            claimName: owntracks-config
+        - name: store
+          persistentVolumeClaim:
+            claimName: owntracks-store

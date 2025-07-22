@@ -1,0 +1,13 @@
+# filename: authelia-headers-middleware.yaml
+apiVersion: 'traefik.io/v1alpha1'
+kind: Middleware
+metadata:
+  name: authelia-public-headers
+  namespace: default # Or the namespace where Authelia is deployed, usually default for common services
+spec:
+  headers:
+    customRequestHeaders:
+      # These tell Authelia what its own public-facing URL is
+      X-Forwarded-Proto: "https" # Assumes all public access is HTTPS
+      X-Forwarded-Host: "" # auth.example.com
+      # X-Forwarded-For is usually added by Traefik by default, but doesn't hurt to ensure
