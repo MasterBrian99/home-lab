@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docmost-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entryPoints: 'websecure'
+    traefik.ingress.kubernetes.io/router.tls: 'true'
+
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - docmost.example.com
+      secretName: docmost-tls   
+  rules:
+    - host: docmost.example.com  
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: docmost
+                port:
+                  number: 80     
